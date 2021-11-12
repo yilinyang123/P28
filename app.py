@@ -3,6 +3,7 @@ import scanpy as sc
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from matplotlib.colors import ListedColormap
 
 @st.cache(allow_output_mutation=True, show_spinner=False)
 def load_data():
@@ -57,10 +58,12 @@ def get_fig():
 @st.cache(allow_output_mutation=True, show_spinner=False)
 def get_fig2():
 	color_map = {0: 'r', 1:'b'}
-	colors = adata.obs['genotype_new'].map(color_map)
+	classes = ['0','1']
+	colours = ListedColormap(['r','b'])
 	fig,ax = plt.subplots(figsize=(15,6))
-	ax.scatter(coord[:, 0], coord[:, 1], c = colors, cmap = 'viridis', s = 2,alpha=0.65,label=adata.obs['genotype_new'])
-	#fig.colorbar(sc, ax=ax2)
+	result = plt.scatter(coord[:, 0], coord[:, 1], c = adata.obs['genotype_new'], cmap = colours, s = 3,alpha=0.65)
+	plt.legend(handles=result.legend_elements()[0], 
+       labels=classes)
 	ax.axis('off')
 	ax.set_title('Genotype')
 	return fig
